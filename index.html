@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body{
+            background-color: rgb(82, 117, 82);
+            color:white;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif}
+    </style>
+    <script defer>
+        const submitDetails = async (event) => {
+            event.preventDefault();
+
+            const login = document.getElementById('login').value;
+            const password = document.getElementById('password').value;
+
+            const result = await fetch('http://localhost:3000/', {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    login,
+                    password
+                })
+            })
+            
+           return result.json();
+        };
+
+        const attemptLogin = (e) => {
+            submitDetails(e).then(result => {
+                if(result.error){
+                    const errorMsg = document.getElementById('error-msg');
+                    errorMsg.innerText = `Oeuf, something wrong: ${result.error}`
+                    return;
+                }
+
+                document.getElementById('nuclear-codes').innerText = result.join(' \n ');
+                document.getElementById('codes-title').innerText = "Enjoy, mon chéri!"
+            })
+        }
+
+
+    </script>
+</head>
+<body>
+    <h1>🚀 France's Nuclear codes ☢️</h1>
+    <h3>
+        <img src='https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/313/flag-france_1f1eb-1f1f7.png' height="20px">
+        Hon hon hon login to see the codes to turn any city into omelette du fromage hon hon 
+        <img src='https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/313/cooking_1f373.png' height="20px">
+    </h3>
+    <form>
+        <input placeholder="Login" type="text" id='login' />
+        <input  placeholder="Password" type="password" id='password'/>
+        <button onclick="attemptLogin(event)">Launch Baguette🥖</button>
+    </form>
+    <p id='error-msg' style='color: red;'></p>
+    <br />
+    <br />
+    <main>
+        <h5 id='codes-title'></h5>
+        <div id='nuclear-codes'>
+    </main>
+</body>
+</html>
